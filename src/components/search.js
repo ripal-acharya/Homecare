@@ -1,6 +1,6 @@
 import React, { Component } from "react"
-import Axios from "axios"
-import * as JsSearch from "js-search"
+
+
 
 class Search extends Component {
   state = {
@@ -11,66 +11,7 @@ class Search extends Component {
     isError: false,
     searchQuery: "",
   }
-  /**
-   * React lifecycle method to fetch the data
-   */
-  async componentDidMount() {
-    Axios.get("https://bvaughn.github.io/js-search/books.json")
-      .then(result => {
-        const bookData = result.data
-        this.setState({ bookList: bookData.books })
-        this.rebuildIndex()
-      })
-      .catch(err => {
-        this.setState({ isError: true })
-        console.log("====================================")
-        console.log(`Something bad happened while fetching the data\n${err}`)
-        console.log("====================================")
-      })
-  }
 
-  /**
-   * rebuilds the overall index based on the options
-   */
-  rebuildIndex = () => {
-    const { bookList } = this.state
-    const dataToSearch = new JsSearch.Search("isbn")
-    /**
-     *  defines a indexing strategy for the data
-     * more about it in here https://github.com/bvaughn/js-search#configuring-the-index-strategy
-     */
-    dataToSearch.indexStrategy = new JsSearch.PrefixIndexStrategy()
-    /**
-     * defines the sanitizer for the search
-     * to prevent some of the words from being excluded
-     *
-     */
-    dataToSearch.sanitizer = new JsSearch.LowerCaseSanitizer()
-    /**
-     * defines the search index
-     * read more in here https://github.com/bvaughn/js-search#configuring-the-search-index
-     */
-    dataToSearch.searchIndex = new JsSearch.TfIdfSearchIndex("isbn")
-
-    dataToSearch.addIndex("title") // sets the index attribute for the data
-    dataToSearch.addIndex("author") // sets the index attribute for the data
-
-    dataToSearch.addDocuments(bookList) // adds the data to be searched
-    this.setState({ search: dataToSearch, isLoading: false })
-  }
-
-  /**
-   * handles the input change and perform a search with js-search
-   * in which the results will be added to the state
-   */
-  searchData = e => {
-    const { search } = this.state
-    const queryResult = search.search(e.target.value)
-    this.setState({ searchQuery: e.target.value, searchResults: queryResult })
-  }
-  handleSubmit = e => {
-    e.preventDefault()
-  }
 
   render() {
     const { bookList, searchResults, searchQuery } = this.state
@@ -115,7 +56,7 @@ class Search extends Component {
                       cursor: "pointer",
                     }}
                   >
-                  Search By Zipcode
+                    Search By Zipcode
                   </th>
                   <th
                     style={{
@@ -127,7 +68,7 @@ class Search extends Component {
                       cursor: "pointer",
                     }}
                   >
-                    Search By insurance 
+                    Search By insurance
                   </th>
                   <th
                     style={{
@@ -139,7 +80,7 @@ class Search extends Component {
                       cursor: "pointer",
                     }}
                   >
-                   Search By language
+                    Search By language
                   </th>
                 </tr>
               </thead>
